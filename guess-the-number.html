@@ -1,0 +1,52 @@
+<html>
+<head>
+  <title>Guess the Number!</title>
+</head>
+<body>
+
+<script type="text/javascript">
+  (function(){
+    var secretNumber = parseInt(Math.random() * 100, 10) + 1;
+    console.log('secret number', secretNumber);
+    var userInput = prompt('Enter a number between 1 and 100');
+    userInput = parseInt(userInput);
+
+    var validateInputForConstraints = function() {
+      if (userInput === NaN) {
+        console.log('Please enter a number.');
+        return false;
+      } else if (userInput < 0) {
+        console.log('Enter a positive number between 1 and 100');
+        return false;
+      } else if (userInput > 100) {
+        console.log('Enter a positive number that is less that 100, please.');
+        return false;
+      }
+      return true;
+    }
+
+    var feedback = function() {
+      var valid = validateInputForConstraints();
+      if (valid) {
+        if (userInput > secretNumber) {
+          console.log('Your number is greater than secret number.');
+        } else if (userInput < secretNumber) {
+          console.log('Your number is less than secret number.');
+        } else if (userInput === secretNumber) {
+          console.log('Your number the same as the secret number.');
+        } else {
+          console.log('There may have been an error with your input');
+        }
+        console.log("Your number was valid. Thanks for playing!");
+      } else {
+        console.log("Your number was NOT valid. Please try again.");
+      }
+    };
+
+ 
+    feedback();    
+  })();
+</script>
+
+</body>
+</html>
