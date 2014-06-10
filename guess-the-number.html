@@ -35,11 +35,8 @@
         return true;
       }
 
-      var feedback = function() {
+      var numberEvaluator = function() {
         // get user input number and make sure its a number that fits what we asked for
-        // var userInput = prompt('Enter a number between 1 and 100');
-        // userInput = parseInt(userInput);
-        // var valid = validateInputForConstraints(userInput);
         var userInput = +$('#user-input').val();
         var valid = validateInputForConstraints(userInput);
         // start with success false
@@ -48,9 +45,13 @@
           if (userInput > secretNumber) {
             console.log('Your number is greater than secret number.');
             console.log("Your number was valid. Thanks for playing!");
+            success = "error1";
+            return success;
           } else if (userInput < secretNumber) {
             console.log('Your number is less than secret number.');
             console.log("Your number was valid. Thanks for playing!");
+            success = "error2";
+            return success;
           } else if (userInput === secretNumber) {
             console.log('Your number the same as the secret number.');
             console.log("Your number was valid. Thanks for playing!");
@@ -62,26 +63,46 @@
           }
         } else {
           console.log("Your number was NOT valid. Please try again.");
+          success = "error3";
+          return success;
         }
         // return false success if nothing matched
         return success;
       };
 
       var run = function() {
-        var response = feedback();
+        var numberEvaluatorResponse = numberEvaluator();
+        console.log("what is the feedback response => ", numberEvaluatorResponse);
+        var response;
         // run again if success is not yet true
-        if (response === false) {
-          run();
+        if (numberEvaluatorResponse === false || numberEvaluatorResponse === "error1" || numberEvaluatorResponse === "error2" || numberEvaluatorResponse === "error3") {
+          // response = run();
+          return numberEvaluatorResponse;
         } else {
           // else tell the user they won
           console.log("Congrats you win!");
+          return true;
         }
+        // @todo invert this to if true - which should get rid of the string of conditionals in if
       }
    
       // kick off the script
-      // run();    
+      // run the program when you click the submit button
+      // log appropriate response based off the error message 
       $('#submit-button').on('click', function (e) {
-        run();
+        var response = run();
+        console.log("What is the response from the run method?", response);
+        if (response === true) {
+          $('#response').text('You guessed the number correctly!');
+        } else if (response === "error1") {
+          $('#response').text('Your number is greater than secret number.');
+        } else if (response === "error2") {
+          $('#response').text('Your number is less than secret number.');
+        } else if (response === "error3") {
+          $('#response').text('Your number was NOT valid. Please try again.');
+        } else {
+          $('#response').text('There may have been an error with your input.');
+        }
       });
 
     })();
