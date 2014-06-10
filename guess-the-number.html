@@ -16,19 +16,23 @@
   <input id="submit-button" type="button" value="Guess" />
   <input id="start-game" type="button" value="Start Game" />
   <input id="end-game" type="button" value="End Game" />
-  <input id="clear-input" type="button" value="Clear Input" />
+  <input id="clear-input" type="button" value="Clear Input and Response" />
 
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
   <script type="text/javascript">
     (function(){
+      // this is basically the game's state
       window.gameOver = true;
-      window.secretNumber;
+      // this is used through out this script - @todo: might be able to take off window 
+      // made this global to this function wrapper so two event handlers can user it
+      var secretNumber;
       
+      // this is a helper function to validate the user input
       var validateInputForConstraints = function(userInput) {
         if (userInput === NaN) {
           console.log('Please enter a number.');
           return false;
-        } else if (userInput < 0) {
+        } else if (userInput <= 0) {
           console.log('Enter a positive number between 1 and 100');
           return false;
         } else if (userInput > 100) {
@@ -38,9 +42,11 @@
         return true;
       }
 
-      var numberEvaluator = function() {
+      // this is main number evaluator that checks the user input against the secret number
+      // to see if ti is greater less or equal to the result
+      // it has some error handling for the input
+      var numberEvaluator = function(userInput) {
         // get user input number and make sure its a number that fits what we asked for
-        var userInput = +$('#user-input').val();
         var valid = validateInputForConstraints(userInput);
         // start with success false
         var success = false;
@@ -73,10 +79,12 @@
         return success;
       };
 
-      var run = function() {
-        var numberEvaluatorResponse = numberEvaluator();
+      // GET RID OF THIS TO MAKE IT SIMPLER
+      // this is a run method that runs my number eval with user input
+      // this seems a bit redundant and cold probably all go in number eval 
+      var run = function(userInput) {
+        var numberEvaluatorResponse = numberEvaluator(userInput);
         console.log("what is the feedback response => ", numberEvaluatorResponse);
-        var response;
         // run again if success is not yet true
         if (numberEvaluatorResponse === false || numberEvaluatorResponse === "error1" || numberEvaluatorResponse === "error2" || numberEvaluatorResponse === "error3") {
           // response = run();
@@ -88,14 +96,21 @@
         }
         // @todo invert this to if true - which should get rid of the string of conditionals in if
       }
-   
+      
+      // =====================================
+      //     UI handled with event handlers
+      // =====================================
       // kick off the script
       // run the program when you click the submit button
       // log appropriate response based off the error message 
       $('#submit-button').on('click', function (e) {
         if (!gameOver) {
-          var response = run();
+          var userInput = +$('#user-input').val();
+          console.log("User input is -> ", userInput);
+          
+          var response = run(userInput);
           console.log("What is the response from the run method?", response);
+
           if (response === true) {
             $('#response').text('You guessed the number correctly!  Game Over. Click "Start Game" to begin a new game.');
             gameOver = true;
@@ -128,14 +143,18 @@
       $('#end-game').on('click', function(){
         if (!gameOver) {
           gameOver = true;
+          secretNumber = undefined;
           $('#response').text('You ended the game thanks for playing.');
         } else {
           $('#response').text('You already had Game Over.  Click "Start Game" to begin a new game.');
         }
       });
 
+      // this is a utility button handler to clear the input
+      // I don't need to evalute anything about the game's state to run it
       $('#clear-input').on('click', function() {
         $('#user-input').val('');
+        $('#response').text('');
       });
 
     })();
