@@ -14,12 +14,15 @@
   <br />
   <input id="user-input" type="text" />
   <input id="submit-button" type="button" value="Guess" />
+  <input id="start-game" type="button" value="Start Game" />
+  <input id="end-game" type="button" value="End Game" />
+  <input id="clear-input" type="button" value="Clear Input" />
 
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
   <script type="text/javascript">
     (function(){
-      var secretNumber = parseInt(Math.random() * 100, 10) + 1;
-      console.log('secret number', secretNumber);
+      window.gameOver = true;
+      window.secretNumber;
       
       var validateInputForConstraints = function(userInput) {
         if (userInput === NaN) {
@@ -90,19 +93,49 @@
       // run the program when you click the submit button
       // log appropriate response based off the error message 
       $('#submit-button').on('click', function (e) {
-        var response = run();
-        console.log("What is the response from the run method?", response);
-        if (response === true) {
-          $('#response').text('You guessed the number correctly!');
-        } else if (response === "error1") {
-          $('#response').text('Your number is greater than secret number.');
-        } else if (response === "error2") {
-          $('#response').text('Your number is less than secret number.');
-        } else if (response === "error3") {
-          $('#response').text('Your number was NOT valid. Please try again.');
+        if (!gameOver) {
+          var response = run();
+          console.log("What is the response from the run method?", response);
+          if (response === true) {
+            $('#response').text('You guessed the number correctly!  Game Over. Click "Start Game" to begin a new game.');
+            gameOver = true;
+          } else if (response === "error1") {
+            $('#response').text('Your number is greater than secret number.');
+          } else if (response === "error2") {
+            $('#response').text('Your number is less than secret number.');
+          } else if (response === "error3") {
+            $('#response').text('Your number was NOT valid. Please try again.');
+          } else {
+            $('#response').text('There may have been an error with your input.');
+          }
         } else {
-          $('#response').text('There may have been an error with your input.');
+          $('#response').text('Game Over.  Click "Start Game" to begin a new game.');
         }
+      });
+
+      $('#start-game').on('click', function(){
+        if (gameOver) {
+          gameOver = false;
+          $('#response').text('A New Game has begun! Guess a number.');
+          // generate a new ramdon number on start game
+          secretNumber = parseInt(Math.random() * 100, 10) + 1;
+          console.log('secret number', secretNumber);
+        } else {
+          $('#response').text('A Game is already running. Submit a guess.');
+        }
+      });
+
+      $('#end-game').on('click', function(){
+        if (!gameOver) {
+          gameOver = true;
+          $('#response').text('You ended the game thanks for playing.');
+        } else {
+          $('#response').text('You already had Game Over.  Click "Start Game" to begin a new game.');
+        }
+      });
+
+      $('#clear-input').on('click', function() {
+        $('#user-input').val('');
       });
 
     })();
