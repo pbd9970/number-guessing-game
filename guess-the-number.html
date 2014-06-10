@@ -8,10 +8,8 @@
   (function(){
     var secretNumber = parseInt(Math.random() * 100, 10) + 1;
     console.log('secret number', secretNumber);
-    var userInput = prompt('Enter a number between 1 and 100');
-    userInput = parseInt(userInput);
-
-    var validateInputForConstraints = function() {
+    
+    var validateInputForConstraints = function(userInput) {
       if (userInput === NaN) {
         console.log('Please enter a number.');
         return false;
@@ -26,25 +24,48 @@
     }
 
     var feedback = function() {
-      var valid = validateInputForConstraints();
+      // get user input number and make sure its a number that fits what we asked for
+      var userInput = prompt('Enter a number between 1 and 100');
+      userInput = parseInt(userInput);
+      var valid = validateInputForConstraints(userInput);
+      // start with success false
+      var success = false;
       if (valid) {
         if (userInput > secretNumber) {
           console.log('Your number is greater than secret number.');
+          console.log("Your number was valid. Thanks for playing!");
         } else if (userInput < secretNumber) {
           console.log('Your number is less than secret number.');
+          console.log("Your number was valid. Thanks for playing!");
         } else if (userInput === secretNumber) {
           console.log('Your number the same as the secret number.');
+          console.log("Your number was valid. Thanks for playing!");
+          // only turn success to true and return it when the user did match the number
+          success = true;
+          return success;
         } else {
           console.log('There may have been an error with your input');
         }
-        console.log("Your number was valid. Thanks for playing!");
       } else {
         console.log("Your number was NOT valid. Please try again.");
       }
+      // return false success if nothing matched
+      return success;
     };
 
+    var run = function() {
+      var response = feedback();
+      // run again if success is not yet true
+      if (response === false) {
+        run();
+      } else {
+        // else tell the user they won
+        console.log("Congrats you win!");
+      }
+    }
  
-    feedback();    
+    run();    
+
   })();
 </script>
 
