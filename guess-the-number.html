@@ -16,7 +16,7 @@
       console.log('secret number', secretNumber);
       
       var validateInputForConstraints = function(userInput) {
-        if (userInput === NaN) {
+        if ( isNaN(userInput) ) {
           console.log('Please enter a number.');
           return false;
         } else if (userInput < 0) {
