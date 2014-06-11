@@ -34,7 +34,7 @@
         
         // this is a helper function to validate the user input
         var validateInputForConstraints = function(userInput) {
-          if (userInput === NaN) {
+          if ( isNaN(userInput) ) {
             console.log('Please enter a number.');
             return false;
           } else if (userInput <= 0) {
