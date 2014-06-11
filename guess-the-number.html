@@ -9,155 +9,145 @@
   </head>
   <body>
   
-  <label>Pick a Number from 1-100:</label>
-  <label id="response"></label>
-  <br />
-  <input id="user-input" type="text" />
-  <input id="submit-button" type="button" value="Guess" />
-  <input id="start-game" type="button" value="Start Game" />
-  <input id="end-game" type="button" value="End Game" />
-  <input id="clear-input" type="button" value="Clear Input and Response" />
+    <label>Pick a Number from 1-100:</label>
+    <label id="response"></label>
+    <br />
+    <input id="user-input" type="text" />
+    <input id="submit-button" type="button" value="Guess" />
+    <input id="start-game" type="button" value="Start Game" />
+    <input id="end-game" type="button" value="End Game" />
+    <input id="clear-input" type="button" value="Clear Input and Response" />
 
-  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-  <script type="text/javascript">
-    (function(){
-      // this is basically the game's state
-      window.gameOver = true;
-      // this is used through out this script - @todo: might be able to take off window 
-      // made this global to this function wrapper so two event handlers can user it
-      var secretNumber;
-      
-      // this is a helper function to validate the user input
-      var validateInputForConstraints = function(userInput) {
-        if (userInput === NaN) {
-          console.log('Please enter a number.');
-          return false;
-        } else if (userInput <= 0) {
-          console.log('Enter a positive number between 1 and 100');
-          return false;
-        } else if (userInput > 100) {
-          console.log('Enter a positive number that is less that 100, please.');
-          return false;
-        }
-        return true;
-      }
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script type="text/javascript">
+      (function(){
 
-      // this is main number evaluator that checks the user input against the secret number
-      // to see if ti is greater less or equal to the result
-      // it has some error handling for the input
-      var numberEvaluator = function(userInput) {
-        // get user input number and make sure its a number that fits what we asked for
-        var valid = validateInputForConstraints(userInput);
-        // start with success false
-        var success = false;
-        if (valid) {
-          if (userInput > secretNumber) {
-            console.log('Your number is greater than secret number.');
-            console.log("Your number was valid. Thanks for playing!");
-            success = "error1";
-            return success;
-          } else if (userInput < secretNumber) {
-            console.log('Your number is less than secret number.');
-            console.log("Your number was valid. Thanks for playing!");
-            success = "error2";
-            return success;
-          } else if (userInput === secretNumber) {
-            console.log('Your number the same as the secret number.');
-            console.log("Your number was valid. Thanks for playing!");
-            // only turn success to true and return it when the user did match the number
-            success = true;
-            return success;
-          } else {
-            console.log('There may have been an error with your input');
+        // =====================================
+        //         Application Logic
+        // =====================================
+        //
+        // this is basically the game's state
+        var gameOver = true;
+        // this is used through out this script - @todo: might be able to take off window 
+        // made this global to this function wrapper so two event handlers can user it
+        var secretNumber;
+        
+        // this is a helper function to validate the user input
+        var validateInputForConstraints = function(userInput) {
+          if (userInput === NaN) {
+            console.log('Please enter a number.');
+            return false;
+          } else if (userInput <= 0) {
+            console.log('Enter a positive number between 1 and 100');
+            return false;
+          } else if (userInput > 100) {
+            console.log('Enter a positive number that is less that 100, please.');
+            return false;
           }
-        } else {
-          console.log("Your number was NOT valid. Please try again.");
-          success = "error3";
-          return success;
-        }
-        // return false success if nothing matched
-        return success;
-      };
-
-      // GET RID OF THIS TO MAKE IT SIMPLER
-      // this is a run method that runs my number eval with user input
-      // this seems a bit redundant and cold probably all go in number eval 
-      var run = function(userInput) {
-        var numberEvaluatorResponse = numberEvaluator(userInput);
-        console.log("what is the feedback response => ", numberEvaluatorResponse);
-        // run again if success is not yet true
-        if (numberEvaluatorResponse === false || numberEvaluatorResponse === "error1" || numberEvaluatorResponse === "error2" || numberEvaluatorResponse === "error3") {
-          // response = run();
-          return numberEvaluatorResponse;
-        } else {
-          // else tell the user they won
-          console.log("Congrats you win!");
           return true;
         }
-        // @todo invert this to if true - which should get rid of the string of conditionals in if
-      }
-      
-      // =====================================
-      //     UI handled with event handlers
-      // =====================================
-      // kick off the script
-      // run the program when you click the submit button
-      // log appropriate response based off the error message 
-      $('#submit-button').on('click', function (e) {
-        if (!gameOver) {
-          var userInput = +$('#user-input').val();
-          console.log("User input is -> ", userInput);
-          
-          var response = run(userInput);
-          console.log("What is the response from the run method?", response);
 
-          if (response === true) {
-            $('#response').text('You guessed the number correctly!  Game Over. Click "Start Game" to begin a new game.');
-            gameOver = true;
-          } else if (response === "error1") {
-            $('#response').text('Your number is greater than secret number.');
-          } else if (response === "error2") {
-            $('#response').text('Your number is less than secret number.');
-          } else if (response === "error3") {
-            $('#response').text('Your number was NOT valid. Please try again.');
+        // this is main number evaluator that checks the user input against the secret number
+        // to see if ti is greater less or equal to the result
+        // it has some error handling for the input
+        var numberEvaluator = function(userInput) {
+          // get user input number and make sure its a number that fits what we asked for
+          var valid = validateInputForConstraints(userInput);
+          // start with success false
+          var success = false;
+          if (valid) {
+            if (userInput > secretNumber) {
+              console.log('Your number is greater than secret number.');
+              console.log("Your number was valid. Thanks for playing!");
+              success = "message1";
+              return success;
+            } else if (userInput < secretNumber) {
+              console.log('Your number is less than secret number.');
+              console.log("Your number was valid. Thanks for playing!");
+              success = "message2";
+              return success;
+            } else if (userInput === secretNumber) {
+              console.log('Your number the same as the secret number.');
+              console.log("Your number was valid. Thanks for playing!");
+              // only turn success to true and return it when the user did match the number
+              success = true;
+              return success;
+            } else {
+              console.log('There may have been an error with your input');
+            }
           } else {
-            $('#response').text('There may have been an error with your input.');
+            console.log("Your number was NOT valid. Please try again.");
+            success = "error1";
+            return success;
           }
-        } else {
-          $('#response').text('Game Over.  Click "Start Game" to begin a new game.');
-        }
-      });
+          // return false success if nothing matched
+          return success;
+        };
 
-      $('#start-game').on('click', function(){
-        if (gameOver) {
-          gameOver = false;
-          $('#response').text('A New Game has begun! Guess a number.');
-          // generate a new ramdon number on start game
-          secretNumber = parseInt(Math.random() * 100, 10) + 1;
-          console.log('secret number', secretNumber);
-        } else {
-          $('#response').text('A Game is already running. Submit a guess.');
-        }
-      });
+        
+        // =====================================
+        //     UI handled with event handlers
+        // =====================================
+        //
+        // kick off the script
+        // run the program when you click the submit button
+        // log appropriate response based off the error message 
+        $('#submit-button').on('click', function (e) {
+          if (!gameOver) {
+            var userInput = +$('#user-input').val();
+            console.log("User input is -> ", userInput);
+            
+            var response = numberEvaluator(userInput);
+            console.log("What is the response from the run method?", response);
 
-      $('#end-game').on('click', function(){
-        if (!gameOver) {
-          gameOver = true;
-          secretNumber = undefined;
-          $('#response').text('You ended the game thanks for playing.');
-        } else {
-          $('#response').text('You already had Game Over.  Click "Start Game" to begin a new game.');
-        }
-      });
+            if (response === true) {
+              $('#response').text('You guessed the number correctly!  Game Over. Click "Start Game" to begin a new game.');
+              gameOver = true;
+            } else if (response === "message1") {
+              $('#response').text('Your number is greater than secret number.');
+            } else if (response === "message2") {
+              $('#response').text('Your number is less than secret number.');
+            } else if (response === "error1") {
+              $('#response').text('Your number was NOT valid. Please try again.');
+            } else {
+              // this is your unknown error
+              $('#response').text('There may have been an error with your input.');
+            }
+          } else {
+            $('#response').text('Game Over.  Click "Start Game" to begin a new game.');
+          }
+        });
 
-      // this is a utility button handler to clear the input
-      // I don't need to evalute anything about the game's state to run it
-      $('#clear-input').on('click', function() {
-        $('#user-input').val('');
-        $('#response').text('');
-      });
+        $('#start-game').on('click', function(){
+          if (gameOver) {
+            gameOver = false;
+            $('#response').text('A New Game has begun! Guess a number.');
+            // generate a new ramdon number on start game
+            secretNumber = parseInt(Math.random() * 100, 10) + 1;
+            console.log('secret number', secretNumber);
+          } else {
+            $('#response').text('A Game is already running. Submit a guess.');
+          }
+        });
 
-    })();
-  </script>
+        $('#end-game').on('click', function(){
+          if (!gameOver) {
+            gameOver = true;
+            secretNumber = undefined;
+            $('#response').text('You ended the game thanks for playing.');
+          } else {
+            $('#response').text('You already had Game Over.  Click "Start Game" to begin a new game.');
+          }
+        });
+
+        // this is a utility button handler to clear the input
+        // I don't need to evalute anything about the game's state to run it
+        $('#clear-input').on('click', function() {
+          $('#user-input').val('');
+          $('#response').text('');
+        });
+
+      })();
+    </script>
   </body>
 </html>
