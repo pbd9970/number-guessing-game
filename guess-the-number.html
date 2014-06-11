@@ -56,7 +56,7 @@
         
         // this is a helper function to validate the user input
         var validateInputForConstraints = function(userInput) {
-          if (userInput === NaN) {
+          if ( isNaN(userInput) ) {
             console.log('Please enter a number.');
             return false;
           } else if (userInput <= 0) {
@@ -67,7 +67,7 @@
             return false;
           }
           return true;
-        }
+        };
 
         // this is main number evaluator that checks the user input against the secret number
         // to see if ti is greater less or equal to the result
