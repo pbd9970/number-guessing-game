@@ -12,17 +12,11 @@
     
     // this is a helper function to validate the user input
     this.validateInputForConstraints = function(userInput) {
-      if ( isNaN(userInput) ) {
-        console.log('Please enter a number.');
+      if ( isNaN(userInput) || userInput <= 0 || userInput > 100) {
         return false;
-      } else if (userInput <= 0) {
-        console.log('Enter a positive number between 1 and 100');
-        return false;
-      } else if (userInput > 100) {
-        console.log('Enter a positive number that is less that 100, please.');
-        return false;
+      } else {
+        return true;
       }
-      return true;
     };
 
     // this is main number evaluator that checks the user input against the secret number
@@ -35,30 +29,20 @@
       var success = false;
       if (valid) {
         if (userInput > this.secretNumber) {
-          console.log('Your number is greater than secret number.');
-          console.log("Your number was valid. Thanks for playing!");
-          success = "message1";
-          return success;
+          return "message1";
         } else if (userInput < this.secretNumber) {
-          console.log('Your number is less than secret number.');
-          console.log("Your number was valid. Thanks for playing!");
-          success = "message2";
-          return success;
+          return "message2";
         } else if (userInput === this.secretNumber) {
-          console.log('Your number the same as the secret number.');
-          console.log("Your number was valid. Thanks for playing!");
-          // only turn success to true and return it when the user did match the number
-          success = true;
-          return success;
+          return true;
         } else {
+          // how could we test this?
           console.log('There may have been an error with your input');
         }
       } else {
-        console.log("Your number was NOT valid. Please try again.");
-        success = "error1";
-        return success;
+        return "error1";
       }
       // return false success if nothing matched
+      // how could we test this?
       return success;
     };
   };
