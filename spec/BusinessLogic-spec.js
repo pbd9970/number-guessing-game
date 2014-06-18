@@ -1,6 +1,6 @@
 describe("BusinessLogic", function () {
 
-  describe("validateInputForConstraints", function () {
+  describe("validateInputForConstraints", function () { //Callback function
     it('returns true if the input is a number between 1 and 100', function() {
       var guessNum = 58;
       var result = bl.validateInputForConstraints(guessNum);
